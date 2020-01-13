@@ -1,14 +1,62 @@
-let myLibrary = [{title:"Harry Potter and the Prisoner Askaban",
-author: "J.K. Rowling",
-numOfPages: 374,
-read: "Yes" },
-{title:"Harry Potter and the Deathly Hallows",
-author: "J.K. Rowling",
-numOfPages: 304,
-read: "Yes" },{title:"Harry Potter 1",
-author: "J.K. Rowling",
-numOfPages: 204,
-read: "No" },];
+// adding storage, will change some things...
+function storageAvailable(type) {
+    var storage;
+    try {
+        storage = window[type];
+        var x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
+    }
+}
+
+if (storageAvailable('localStorage')) {
+    // Yippee! We can use localStorage awesomeness
+    alert("Local Storage will be used");
+  }
+  else {
+    // Too bad, no localStorage for us
+    alert("Local Storage is not available on this browser.");
+  }
+//parses array into json format and back when called.
+Storage.prototype.setObj = function(key, obj) {
+    return this.setItem(key, JSON.stringify(obj))
+}
+Storage.prototype.getObj = function(key) {
+    return JSON.parse(this.getItem(key))
+}
+
+let myLibrary;
+
+if(!localStorage){
+    myLibrary = [{title:"Harry Potter and the Prisoner Askaban",
+    author: "J.K. Rowling",
+    numOfPages: 374,
+    read: "Read" },
+    {title:"Harry Potter and the Deathly Hallows",
+    author: "J.K. Rowling",
+    numOfPages: 304,
+    read: "Read" },{title:"Harry Potter 1",
+    author: "J.K. Rowling",
+    numOfPages: 204,
+    read: "Unread" },]; 
+}else{
+myLibrary = localStorage.getObj("library");
+}
 
 function Book(title, author, numOfPages, read){//construtor
     this.title = title;
@@ -16,9 +64,9 @@ function Book(title, author, numOfPages, read){//construtor
     this.numOfPages = numOfPages;
     
     if(read){
-        this.read = "Yes";
+        this.read = "Read";
     }else{
-        this.read = "No";
+        this.read = "Unread";
     }
     this.info = function(){
         return `${this.title} by ${this.author}, ${this.numOfPages} pages, ${this.read}`;
@@ -45,15 +93,13 @@ function addBookToLibrary(){
         console.log(typeof numOfPages);
     }
     let read = document.getElementById("read?").checked;
-
     myLibrary.push(new Book(title,author,numOfPages,read));
     secondTable.innerHTML="";
     render();
     
 }
 
-function render(){
-    
+function render(){ 
     
     secondTable.innerHTML="";
     myLibrary.forEach((el,index)=>{
@@ -77,7 +123,7 @@ function render(){
         cell6.innerHTML = `<button class="button">Delete</button>`;
     });
 
-    allremoveButton  = document.querySelectorAll("#remove");
+    let allremoveButton  = document.querySelectorAll("#remove");
     for (const button of allremoveButton) {
         button.addEventListener('click', remove);
     }
@@ -85,9 +131,9 @@ function render(){
     for( const toggles of allToggle){
         toggles.addEventListener('click', toggle)
     }
+    localStorage.setObj("library", myLibrary);
+    console.log(localStorage);
 }
-
-let allremoveButton;
 
 function remove(){
     //console.log(this.parentNode.dataset.index);
@@ -97,10 +143,10 @@ function remove(){
 
 function toggle(){
     
-    if(myLibrary[this.parentNode.dataset.index].read === "Yes"){
-        myLibrary[this.parentNode.dataset.index].read = "No"; 
-    }else if(myLibrary[this.parentNode.dataset.index].read === "No"){
-        myLibrary[this.parentNode.dataset.index].read = "Yes";
+    if(myLibrary[this.parentNode.dataset.index].read === "Read"){
+        myLibrary[this.parentNode.dataset.index].read = "Unread"; 
+    }else if(myLibrary[this.parentNode.dataset.index].read === "Unread"){
+        myLibrary[this.parentNode.dataset.index].read = "Read";
     }
     render();
 }
@@ -109,7 +155,3 @@ render();
 let submit = document.querySelector("button");
 
 submit.addEventListener("click",addBookToLibrary);
-
-
-
-
