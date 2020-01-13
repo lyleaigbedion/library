@@ -42,7 +42,8 @@ Storage.prototype.getObj = function(key) {
 
 let myLibrary;
 
-if(!localStorage){
+if(localStorage.length === 0){
+    
     myLibrary = [{title:"Harry Potter and the Prisoner Askaban",
     author: "J.K. Rowling",
     numOfPages: 374,
@@ -56,6 +57,7 @@ if(!localStorage){
     read: "Unread" },]; 
 }else{
 myLibrary = localStorage.getObj("library");
+
 }
 
 function Book(title, author, numOfPages, read){//construtor
