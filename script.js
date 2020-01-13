@@ -102,7 +102,28 @@ function addBookToLibrary(){
 function render(){ 
     
     secondTable.innerHTML="";
-    myLibrary.forEach((el,index)=>{
+    for(let i = myLibrary.length-1; i >= 0; i--){
+        let row = secondTable.insertRow(0);
+        row.setAttribute("data-index", `${i}`);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+        let cell4 = row.insertCell(3);
+        let cell5 = row.insertCell(4);
+        let cell6 = row.insertCell(5);
+
+        cell1.innerHTML = myLibrary[i].title;
+        cell2.innerHTML = myLibrary[i].author;
+        cell3.innerHTML = myLibrary[i].numOfPages;
+        cell4.innerHTML = `<button class="button">${myLibrary[i].read}</button>`;
+        cell4.id = "toggle"; //to toggle read and unread.
+        cell5.innerHTML = i + 1;
+        cell6.id = "remove";//add remove id to select it if you want to remove the book.
+        //table.appendChild( row );
+        cell6.innerHTML = `<button class="button">Delete</button>`;
+    }
+
+    /*myLibrary.forEach((el,index)=>{
         let row = secondTable.insertRow(0);
         row.setAttribute("data-index", `${index}`);
         let cell1 = row.insertCell(0);
@@ -121,7 +142,7 @@ function render(){
         cell6.id = "remove";//add remove id to select it if you want to remove the book.
         //table.appendChild( row );
         cell6.innerHTML = `<button class="button">Delete</button>`;
-    });
+    });*/
 
     let allremoveButton  = document.querySelectorAll("#remove");
     for (const button of allremoveButton) {

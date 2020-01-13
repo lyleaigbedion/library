@@ -1,3 +1,6 @@
+.Title{
+    margin-left: 15%;
+}
 .inputs{
     margin: auto;
     position: relative;
@@ -12,7 +15,7 @@ input{
 }
 
 #library_catalog{
-    width: 80%;
+    width: 90%;
 }
 .lib_category{
     overflow-x:auto;
@@ -62,6 +65,7 @@ input{
     #5F6368;
     font-family: arial,sans-serif;
     font-size: 14px;
+    font-weight: bold;
     margin: 1px 4px;
     padding: 0 16px;
     line-height: 27px;
@@ -91,4 +95,7 @@ color:
 }
 tr{
     text-align: center;
+}
+*{
+    font-family: arial,sans-serif;   
 }
