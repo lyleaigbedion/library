@@ -1,3 +1,5 @@
+let myLibrary;
+
 // adding storage, will change some things...
 function storageAvailable(type) {
     var storage;
@@ -23,15 +25,6 @@ function storageAvailable(type) {
             (storage && storage.length !== 0);
     }
 }
-
-if (storageAvailable('localStorage')) {
-    // Yippee! We can use localStorage awesomeness
-    alert("Local Storage will be used");
-  }
-  else {
-    // Too bad, no localStorage for us
-    alert("Local Storage is not available on this browser.");
-  }
 //parses array into json format and back when called.
 Storage.prototype.setObj = function(key, obj) {
     return this.setItem(key, JSON.stringify(obj))
@@ -40,25 +33,43 @@ Storage.prototype.getObj = function(key) {
     return JSON.parse(this.getItem(key))
 }
 
-let myLibrary;
-
-if(localStorage.length === 0){
+if (storageAvailable('localStorage')) {
+    // Yippee! We can use localStorage awesomeness
+    alert("Local Storage will be used");
+    if(localStorage.length === 0){
     
+        myLibrary = [{title:"Harry Potter and the Prisoner Askaban",
+        author: "J.K. Rowling",
+        numOfPages: 374,
+        read: "Read" },
+        {title:"Harry Potter and the Deathly Hallows",
+        author: "J.K. Rowling",
+        numOfPages: 304,
+        read: "Read" },{title:"Harry Potter 1",
+        author: "J.K. Rowling",
+        numOfPages: 204,
+        read: "Unread" },]; 
+    }else{
+    myLibrary = localStorage.getObj("library");
+    
+    }
+  }
+  else {
+    // Too bad, no localStorage for us
+    alert("Local Storage is not available on this browser.");
     myLibrary = [{title:"Harry Potter and the Prisoner Askaban",
-    author: "J.K. Rowling",
-    numOfPages: 374,
-    read: "Read" },
-    {title:"Harry Potter and the Deathly Hallows",
-    author: "J.K. Rowling",
-    numOfPages: 304,
-    read: "Read" },{title:"Harry Potter 1",
-    author: "J.K. Rowling",
-    numOfPages: 204,
-    read: "Unread" },]; 
-}else{
-myLibrary = localStorage.getObj("library");
+        author: "J.K. Rowling",
+        numOfPages: 374,
+        read: "Read" },
+        {title:"Harry Potter and the Deathly Hallows",
+        author: "J.K. Rowling",
+        numOfPages: 304,
+        read: "Read" },{title:"Harry Potter 1",
+        author: "J.K. Rowling",
+        numOfPages: 204,
+        read: "Unread" },]; 
+  }
 
-}
 
 function Book(title, author, numOfPages, read){//construtor
     this.title = title;
@@ -154,8 +165,10 @@ function render(){
     for( const toggles of allToggle){
         toggles.addEventListener('click', toggle)
     }
-    localStorage.setObj("library", myLibrary);
-    console.log(localStorage);
+    if (storageAvailable('localStorage')) {
+        localStorage.setObj("library", myLibrary);
+        console.log(localStorage);
+    }
 }
 
 function remove(){
